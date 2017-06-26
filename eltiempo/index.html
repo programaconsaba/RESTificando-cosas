@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>RESTificando cosas</title>
+<script src="node_modules/jquery/dist/jquery.min.js"></script>
+</head>
+<body>
+	<h1>RESTificando "el tiempo"</h1>
+
+	<article id="eltiempo">
+		<h2>-- &deg;C </h2>
+		<span>ciudad</span>
+	</article>
+	
+	<button id="eltiempo-local">El tiempo REST Local</button>
+	<button id="eltiempo-spring">El tiempo REST Spring</button>
+	<button id="eltiempo-jaxrs">El tiempo REST JAX-RS</button>
+	<button id="eltiempo-spark">El tiempo REST Spark Java</button>
+	
+	<script>
+		$(document).ready(function() {
+			$("#eltiempo-local").on("click", function(event){
+				llamadaREST("local/eltiempo.json");
+			});
+			
+			$("#eltiempo-spring").on("click", function(event){
+				llamadaREST("http://localhost:8080/api/tiempo");
+			});
+
+			$("#eltiempo-jaxrs").on("click", function(event){
+				llamadaREST("http://localhost:8081/api/tiempo");
+			});
+
+			$("#eltiempo-spark").on("click", function(event){
+				llamadaREST("http://localhost:8082/api/tiempo");
+			});
+			
+			llamadaREST = function(url){
+				$.ajax({
+					url: url,
+					success: function(json){
+						//alert(JSON.stringify(json));
+						
+						$("#eltiempo h2").html(json.temperatura + " &deg;C");
+						$("#eltiempo span").html(json.ciudad);
+						
+					}
+				});
+			}
+			
+		});
+	</script>
+</body>
+</html>
